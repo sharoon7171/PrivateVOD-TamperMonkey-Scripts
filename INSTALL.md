@@ -57,7 +57,21 @@ Automatically loads video players without autoplay.
 
 ---
 
-### 5. **Favourite & Like Tracker** 💾
+### 5. **Element Blocker** 🛡️
+Removes unwanted elements containing "Scene", "HD", or "Stream" from cards.
+
+[![Install Element Blocker](https://img.shields.io/badge/Install-Element%20Blocker-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Blocker/privatevod%20element%20blocker.user.js)
+
+**Features:**
+- 🛡️ Blocks unwanted elements automatically
+- 🎯 Targets specific cards (.card.m-2)
+- ⏰ Continuous monitoring every 2 seconds
+- 📝 Console logging for debugging
+- 🔄 Auto-updates
+
+---
+
+### 6. **Favourite & Like Tracker** 💾
 Tracks and stores favourite/like status with management interface.
 
 [![Install Favourite & Like Tracker](https://img.shields.io/badge/Install-Favourite%20%26%20Like%20Tracker-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Favourite%20%26%20Like%20Tracker/privatevod%20favourite%20and%20like%20tracker.user.js)
@@ -103,7 +117,8 @@ For the best experience, install these scripts together:
 1. **Auto Favourite Video** - Auto-favourites videos
 2. **Auto Favourite Star** - Auto-favourites stars  
 3. **Element Mover** - Better UI layout
-4. **Favourite & Like Tracker** - Track your favourites
+4. **Element Blocker** - Clean up unwanted content
+5. **Favourite & Like Tracker** - Track your favourites
 
 ## 🛠️ **Troubleshooting**
 
@@ -129,7 +144,8 @@ For the best experience, install these scripts together:
 |--------|-------------|------------|--------------|---------------|
 | Auto Favourite Video | ✅ | ❌ | ✅ | ✅ |
 | Auto Favourite Star | ❌ | ✅ | ✅ | ✅ |
-| Element Mover | ✅ | ❌ | ✅ | ✅ |
+| Element Mover | ✅ | ❌ | ✅ | ❌ |
+| Element Blocker | ✅ | ❌ | ✅ | ❌ |
 | Auto Video Loader | ✅ | ❌ | ✅ | ❌ |
 | Favourite & Like Tracker | ✅ | ❌ | ✅ | ❌ |
 

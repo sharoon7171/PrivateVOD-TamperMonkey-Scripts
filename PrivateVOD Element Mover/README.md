@@ -1,23 +1,23 @@
 # PrivateVOD Element Mover
 
-A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, Like, and Screenshots buttons) and video metadata container (release date, studio, director, length, tags) inside the purchase-options div with a professional single-row layout for seamless integration.
+A TamperMonkey script that moves user-actions and video metadata into purchase options with a clean 2-row layout for better organization.
 
 ## Features
 
-- **Network-level interception** - Modifies HTML before it reaches the browser
-- **Zero flickering** - Changes appear instantly as the page loads
-- **Professional layout** - User-actions and metadata with clean single-row design
-- **Dual approach** - Uses both fetch() and XMLHttpRequest interception
-- **Fallback protection** - DOM manipulation as backup if network interception fails
+- **DOM manipulation** - Works on already-loaded pages
+- **2-row layout** - Text-only metadata on top, linked metadata below
+- **Basic button styling** - Clean, simple appearance
+- **Automatic detection** - Finds and moves elements automatically
+- **Separate cards** - Metadata and user actions in different cards
 - **Comprehensive coverage** - Works on all PrivateVOD video pages
 
 ## How It Works
 
-1. **Intercepts network requests** at the document-start phase
-2. **Modifies HTML content** before it's parsed by the browser
-3. **Wraps user-actions and metadata in professional layout** with single-row design
-4. **Moves styled elements** to the beginning of purchase-options div
-5. **Returns modified HTML** to the browser for instant rendering
+1. **Waits for elements** to be available in the DOM
+2. **Finds metadata container** (.col-sm-5) with all metadata divs
+3. **Separates metadata** into text-only and linked categories
+4. **Creates two cards** - one for metadata, one for user actions
+5. **Moves elements** to the purchase-options area with clean styling
 
 ## Installation
 
@@ -33,10 +33,11 @@ A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, 
 
 ## Technical Details
 
-- **Target Elements**: `.user-actions` → `#purchase-options`
-- **Method**: Network request interception + HTML modification
-- **Fallback**: DOM manipulation if network interception fails
-- **Performance**: Zero impact - changes happen before page render
+- **Target Elements**: `.col-sm-5` metadata container + `.user-actions` → `#purchase-options`
+- **Method**: DOM manipulation with element waiting
+- **Layout**: 2-row metadata (text-only + linked) + user actions card
+- **Styling**: Basic button appearance with clean borders
+- **Performance**: Lightweight - runs after page load
 
 ## Compatibility
 
