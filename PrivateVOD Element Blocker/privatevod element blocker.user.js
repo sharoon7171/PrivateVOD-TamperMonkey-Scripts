@@ -73,15 +73,40 @@
     // Start the process
     waitForCards();
     
-    // Also run periodically to catch dynamically added cards
-    let lastCardCount = document.querySelectorAll('.card.m-2').length;
-    setInterval(() => {
-        const currentCards = document.querySelectorAll('.card.m-2');
-        if (currentCards.length !== lastCardCount) {
-            lastCardCount = currentCards.length;
-            blockUnwantedElements();
-        }
-    }, 2000); // Check every 2 seconds only if card count changes
+    // Monitor for dynamically added cards
+    function setupCardMonitor() {
+        const observer = new MutationObserver((mutations) => {
+            let shouldCheck = false;
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'childList') {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === Node.ELEMENT_NODE) {
+                            if (node.classList && node.classList.contains('card') && node.classList.contains('m-2')) {
+                                shouldCheck = true;
+                            } else if (node.querySelector && node.querySelector('.card.m-2')) {
+                                shouldCheck = true;
+                            }
+                        }
+                    });
+                }
+            });
+            
+            if (shouldCheck) {
+                console.log('🔄 New cards detected, checking for unwanted elements');
+                blockUnwantedElements();
+            }
+        });
+        
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+        
+        console.log('👀 Card monitor started - watching for new cards');
+    }
+    
+    // Start monitoring after initial check
+    setTimeout(setupCardMonitor, 1000);
     
     console.log('🚀 Element Blocker ready - monitoring for unwanted elements');
 })();
