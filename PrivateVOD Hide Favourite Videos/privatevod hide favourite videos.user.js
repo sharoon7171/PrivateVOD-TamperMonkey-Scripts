@@ -214,6 +214,16 @@
         console.log('🎨 Styles added for hidden elements');
     }
     
+    // Cleanup function to show all hidden elements when script is disabled
+    function cleanup() {
+        const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
+        hiddenItems.forEach(item => {
+            item.classList.remove(CONFIG.hideClass);
+            item.style.display = '';
+        });
+        console.log(`👁️ Cleanup: Shown ${hiddenItems.length} previously hidden elements`);
+    }
+    
     // Initialize the script
     function init() {
         addStyles();
@@ -223,6 +233,26 @@
         console.log('🚀 PrivateVOD Hide Favourite Videos ready');
         console.log('💡 Use PrivateVODHideFavourites.process() to manually process');
     }
+    
+    // Add cleanup to global scope for manual cleanup
+    window.PrivateVODHideFavourites.cleanup = cleanup;
+    
+    // Listen for page visibility changes (script might be disabled)
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            // Page is hidden, might be script disabled
+            setTimeout(() => {
+                if (document.visibilityState === 'visible') {
+                    // Page is visible again, check if script is still running
+                    const testElement = document.querySelector('.privatevod-hidden-favourite');
+                    if (testElement && testElement.style.display === 'none') {
+                        // Script might be disabled, show all hidden elements
+                        cleanup();
+                    }
+                }
+            }, 1000);
+        }
+    });
     
     // Start the script
     init();
