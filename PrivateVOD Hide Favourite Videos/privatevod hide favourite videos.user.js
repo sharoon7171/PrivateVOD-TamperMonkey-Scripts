@@ -229,6 +229,7 @@
         addStyles();
         waitForGridItems();
         setupStorageMonitor();
+        setupScriptStateMonitor();
         
         console.log('🚀 PrivateVOD Hide Favourite Videos ready');
         console.log('💡 Use PrivateVODHideFavourites.process() to manually process');
@@ -237,22 +238,72 @@
     // Add cleanup to global scope for manual cleanup
     window.PrivateVODHideFavourites.cleanup = cleanup;
     
-    // Listen for page visibility changes (script might be disabled)
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            // Page is hidden, might be script disabled
-            setTimeout(() => {
-                if (document.visibilityState === 'visible') {
-                    // Page is visible again, check if script is still running
-                    const testElement = document.querySelector('.privatevod-hidden-favourite');
-                    if (testElement && testElement.style.display === 'none') {
-                        // Script might be disabled, show all hidden elements
-                        cleanup();
-                    }
-                }
+    // Real-time script enable/disable detection
+    function setupScriptStateMonitor() {
+        let isScriptActive = true;
+        let heartbeatInterval;
+        
+        // Set up heartbeat to detect if script is disabled
+        function startHeartbeat() {
+            heartbeatInterval = setInterval(() => {
+                // Update heartbeat timestamp
+                window.PrivateVODHideFavourites.lastHeartbeat = Date.now();
             }, 1000);
         }
-    });
+        
+        // Check if script is still active
+        function checkScriptState() {
+            const now = Date.now();
+            const lastHeartbeat = window.PrivateVODHideFavourites?.lastHeartbeat || 0;
+            
+            // If heartbeat is too old or functions don't exist, script was disabled
+            if (!window.PrivateVODHideFavourites || !window.PrivateVODHideFavourites.process || 
+                (now - lastHeartbeat) > 3000) {
+                if (isScriptActive) {
+                    console.log('🔄 Script detected as disabled - showing all elements');
+                    cleanup();
+                    isScriptActive = false;
+                    if (heartbeatInterval) {
+                        clearInterval(heartbeatInterval);
+                    }
+                }
+                return;
+            }
+            
+            // If script is active but was previously disabled, re-process
+            if (!isScriptActive) {
+                console.log('🔄 Script detected as enabled - hiding favourited elements');
+                isScriptActive = true;
+                processGridItems();
+                startHeartbeat();
+            }
+            
+            // Check every 500ms
+            setTimeout(checkScriptState, 500);
+        }
+        
+        // Start heartbeat
+        startHeartbeat();
+        
+        // Start monitoring
+        checkScriptState();
+        
+        // Listen for focus events (user might have disabled/enabled script)
+        window.addEventListener('focus', () => {
+            setTimeout(() => {
+                if (window.PrivateVODHideFavourites && window.PrivateVODHideFavourites.process) {
+                    if (!isScriptActive) {
+                        console.log('🔄 Script re-enabled on focus');
+                        isScriptActive = true;
+                        processGridItems();
+                        startHeartbeat();
+                    }
+                }
+            }, 100);
+        });
+        
+        console.log('👀 Script state monitor started with heartbeat');
+    }
     
     // Start the script
     init();
