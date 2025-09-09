@@ -27,7 +27,7 @@ Page Load → Wait for Functions → Call loadPlayer() → Modify iframe URL →
 
 ### Method 1: Direct Install (Recommended)
 1. **Install TamperMonkey** browser extension
-2. **Click this link**: [Install Auto Video Loader](https://raw.githubusercontent.com/yourusername/PrivateVOD-TamperMonkey-Scripts/main/Auto%20Video%20Loader/autoVideoLoader.user.js)
+2. **Click this link**: [Install Auto Video Loader](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/Auto%20Video%20Loader/autoVideoLoader.user.js)
 3. **TamperMonkey will open** - click "Install"
 4. **Done!** - Script will work on all video pages
 
