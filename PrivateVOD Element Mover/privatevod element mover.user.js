@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         PrivateVOD Element Mover
 // @namespace    http://tampermonkey.net/
-// @version      1.1
-// @description  Moves user-actions and video metadata divs inside purchase-options div at network level for instant, flicker-free movement
+// @version      1.2
+// @description  Moves user-actions and video metadata divs inside purchase-options div with professional single-row layout
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
 // @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Mover/privatevod%20element%20mover.user.js
@@ -123,8 +123,7 @@
 <!-- START METADATA CARD -->
 <div class="card m-2">
     <div class="card-body">
-        <h6 class="card-title mb-3">Video Details</h6>
-        <div class="video-metadata">
+        <div class="video-metadata d-flex flex-wrap justify-content-between align-items-center">
             ${extractMetadataContent(metadataHtml)}
         </div>
     </div>
@@ -250,8 +249,7 @@
             metadataCard.className = 'card m-2';
             metadataCard.innerHTML = `
                 <div class="card-body">
-                    <h6 class="card-title mb-3">Video Details</h6>
-                    <div class="video-metadata">
+                    <div class="video-metadata d-flex flex-wrap justify-content-between align-items-center">
                         ${metadataContainer.innerHTML}
                     </div>
                 </div>
