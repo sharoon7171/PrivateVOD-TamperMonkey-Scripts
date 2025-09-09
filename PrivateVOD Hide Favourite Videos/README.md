@@ -13,7 +13,10 @@ A Tampermonkey userscript that automatically hides grid items containing favouri
 
 1. **Reads Favourites**: Gets favourited scene IDs from localStorage (`privatevod_favourites`)
 2. **Finds Grid Items**: Locates all `.grid-item` elements on the page
-3. **Extracts Scene IDs**: Gets scene ID from `data-scene-id` attribute or element ID
+3. **Extracts Scene IDs**: Gets scene ID from multiple sources:
+   - `data-scene-id` attribute (grid view)
+   - Element ID like "ascene_1749438" (grid view)  
+   - href URLs like "/1749438/private-vod-scene-1-streaming-scene-video.html" (list view)
 4. **Hides Matches**: Hides grid items that contain favourited scene IDs
 5. **Storage Monitoring**: Instantly updates when favourites are added/removed from storage
 
@@ -31,14 +34,8 @@ Open browser console (F12) and use these commands:
 // Manually process all grid items
 PrivateVODHideFavourites.process()
 
-// Get list of favourited scenes
-PrivateVODHideFavourites.getFavourites()
-
-// Manually hide a specific scene
-PrivateVODHideFavourites.hide('1749438')
-
-// Manually show a specific scene
-PrivateVODHideFavourites.show('1749438')
+// Show all hidden elements (cleanup)
+PrivateVODHideFavourites.showAll()
 
 // View configuration
 PrivateVODHideFavourites.config
@@ -64,7 +61,7 @@ This script works seamlessly with:
 
 ## Technical Details
 
-- **Target Elements**: `.grid-item` containers with `data-scene-id` attributes
+- **Target Elements**: `.grid-item` containers (supports both grid and list views)
 - **Storage**: Uses `localStorage.getItem('privatevod_favourites')`
 - **Storage Monitoring**: Watches for localStorage changes for instant updates
 - **Performance**: Efficient processing with minimal impact

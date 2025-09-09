@@ -13,7 +13,10 @@ A Tampermonkey userscript that hides grid items containing ONLY liked (not favou
 
 1. **Reads Data**: Gets favourited and liked scene IDs from localStorage
 2. **Finds Grid Items**: Locates all `.grid-item` elements on the page
-3. **Extracts Scene IDs**: Gets scene ID from `data-scene-id` attribute or element ID
+3. **Extracts Scene IDs**: Gets scene ID from multiple sources:
+   - `data-scene-id` attribute (grid view)
+   - Element ID like "ascene_1749438" (grid view)
+   - href URLs like "/1749438/private-vod-scene-1-streaming-scene-video.html" (list view)
 4. **Smart Logic**: Hides only videos that are liked but NOT favourited
 5. **Storage Monitoring**: Instantly updates when storage changes
 
@@ -91,7 +94,7 @@ This script works seamlessly with:
 
 ## Technical Details
 
-- **Target Elements**: `.grid-item` containers with `data-scene-id` attributes
+- **Target Elements**: `.grid-item` containers (supports both grid and list views)
 - **Storage**: Uses `localStorage.getItem('privatevod_favourites')` and `localStorage.getItem('privatevod_likes')`
 - **Storage Monitoring**: Watches for localStorage changes for instant updates
 - **Performance**: Efficient processing with minimal impact

@@ -65,16 +65,28 @@
     
     // Extract scene ID from grid item
     function getSceneIdFromGridItem(gridItem) {
-        // Look for data-scene-id attribute in the article element
+        // Look for data-scene-id attribute in the article element (grid view)
         const article = gridItem.querySelector('article[data-scene-id]');
         if (article) {
             return article.getAttribute('data-scene-id');
         }
         
-        // Fallback: extract from id attribute like "ascene_1749438"
+        // Fallback: extract from id attribute like "ascene_1749438" (grid view)
         const id = gridItem.id;
         if (id && id.startsWith('ascene_')) {
             return id.replace('ascene_', '');
+        }
+        
+        // List view: extract from href URLs like "/1749438/private-vod-scene-1-streaming-scene-video.html"
+        const links = gridItem.querySelectorAll('a[href*="/"]');
+        for (const link of links) {
+            const href = link.getAttribute('href');
+            if (href && href.includes('/') && href.includes('-streaming-scene-video.html')) {
+                const match = href.match(/\/(\d+)\//);
+                if (match) {
+                    return match[1];
+                }
+            }
         }
         
         return null;
