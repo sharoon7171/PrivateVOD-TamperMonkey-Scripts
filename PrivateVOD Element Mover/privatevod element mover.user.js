@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PrivateVOD Element Mover
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  Moves user-actions and video metadata divs inside purchase-options div with professional single-row layout
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
@@ -127,29 +127,35 @@
             ${extractMetadataContent(metadataHtml)}
         </div>
         <style>
-            .video-metadata .metadata-item {
+            .video-metadata .metadata-btn {
                 display: inline-flex;
                 align-items: center;
-                gap: 0.25rem;
-                font-size: 0.9rem;
-                color: #6c757d;
-            }
-            .video-metadata .metadata-item strong {
+                padding: 0.5rem 1rem;
+                margin: 0.25rem;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                border: 1px solid #dee2e6;
+                border-radius: 20px;
+                font-size: 0.85rem;
                 color: #495057;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+                white-space: nowrap;
+            }
+            .video-metadata .metadata-btn:hover {
+                background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            }
+            .video-metadata .metadata-btn strong {
+                color: #212529;
                 font-weight: 600;
+                margin-right: 0.5rem;
             }
-            .video-metadata .metadata-link {
-                color: #007bff;
-                text-decoration: none;
+            .video-metadata .metadata-btn:first-child {
+                margin-left: 0;
             }
-            .video-metadata .metadata-link:hover {
-                color: #0056b3;
-                text-decoration: underline;
-            }
-            .video-metadata .metadata-separator {
-                color: #dee2e6;
-                font-weight: bold;
-                margin: 0 0.5rem;
+            .video-metadata .metadata-btn:last-child {
+                margin-right: 0;
             }
         </style>
     </div>
@@ -183,38 +189,41 @@
         return userActionsHtml;
     }
     
-    // Function to extract and clean metadata content for single row display
+    // Function to extract and clean metadata content for button-style display
     function extractMetadataContent(metadataHtml) {
         // Extract the inner content from the metadata container
         const contentMatch = metadataHtml.match(/<div class="container px-0"[^>]*>(.*?)<\/div>\s*<\/div>\s*<\/div>/s);
         if (contentMatch) {
             let content = contentMatch[1].trim();
             
-            // Clean up the HTML for better single-row display
-            content = content
-                // Remove extra whitespace and line breaks
-                .replace(/\s+/g, ' ')
-                // Clean up div structure
-                .replace(/<div class="row">/g, '')
-                .replace(/<\/div>/g, '')
-                .replace(/<div class="col-sm-5">/g, '')
-                .replace(/<div class="col-sm-7">/g, '')
-                // Clean up individual metadata items
-                .replace(/<div class="release-date">/g, '<span class="metadata-item">')
-                .replace(/<div class="studio">/g, '<span class="metadata-item">')
-                .replace(/<div class="director">/g, '<span class="metadata-item">')
-                .replace(/<div class="length">/g, '<span class="metadata-item">')
-                // Clean up font-weight classes
-                .replace(/<span class="font-weight-bold mr-2">/g, '<strong>')
-                .replace(/<\/span>/g, '</strong>')
-                // Clean up links
-                .replace(/<a[^>]*>/g, '<span class="metadata-link">')
-                .replace(/<\/a>/g, '</span>')
-                // Add separators between items
-                .replace(/<\/strong>/g, '</strong>')
-                .replace(/(<\/span>)(<span class="metadata-item">)/g, '$1 <span class="metadata-separator">•</span> $2');
+            // Parse the HTML to extract individual metadata items
+            const metadataItems = [];
             
-            return content;
+            // Extract release date
+            const releaseMatch = content.match(/<div class="release-date">.*?<span class="font-weight-bold mr-2">Released:<\/span>(.*?)<\/div>/s);
+            if (releaseMatch) {
+                metadataItems.push(`<span class="metadata-btn"><strong>Released:</strong> ${releaseMatch[1].trim()}</span>`);
+            }
+            
+            // Extract studio
+            const studioMatch = content.match(/<div class="studio">.*?<span class="font-weight-bold mr-2">Studio:<\/span><a[^>]*>(.*?)<\/a>/s);
+            if (studioMatch) {
+                metadataItems.push(`<span class="metadata-btn"><strong>Studio:</strong> ${studioMatch[1].trim()}</span>`);
+            }
+            
+            // Extract director
+            const directorMatch = content.match(/<div class="director">.*?<span class="font-weight-bold mr-2">Director:<\/span><a[^>]*>(.*?)<\/a>/s);
+            if (directorMatch) {
+                metadataItems.push(`<span class="metadata-btn"><strong>Director:</strong> ${directorMatch[1].trim()}</span>`);
+            }
+            
+            // Extract length
+            const lengthMatch = content.match(/<div class="release-date">.*?<span class="font-weight-bold mr-2">Length:<\/span>(.*?)<\/div>/s);
+            if (lengthMatch) {
+                metadataItems.push(`<span class="metadata-btn"><strong>Length:</strong> ${lengthMatch[1].trim()}</span>`);
+            }
+            
+            return metadataItems.join(' ');
         }
         return metadataHtml;
     }
@@ -307,32 +316,38 @@
                 </div>
             `;
             
-            // Add CSS styling
+            // Add CSS styling for button design
             const style = document.createElement('style');
             style.textContent = `
-                .video-metadata .metadata-item {
+                .video-metadata .metadata-btn {
                     display: inline-flex;
                     align-items: center;
-                    gap: 0.25rem;
-                    font-size: 0.9rem;
-                    color: #6c757d;
-                }
-                .video-metadata .metadata-item strong {
+                    padding: 0.5rem 1rem;
+                    margin: 0.25rem;
+                    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                    border: 1px solid #dee2e6;
+                    border-radius: 20px;
+                    font-size: 0.85rem;
                     color: #495057;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                    transition: all 0.3s ease;
+                    white-space: nowrap;
+                }
+                .video-metadata .metadata-btn:hover {
+                    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+                }
+                .video-metadata .metadata-btn strong {
+                    color: #212529;
                     font-weight: 600;
+                    margin-right: 0.5rem;
                 }
-                .video-metadata .metadata-link {
-                    color: #007bff;
-                    text-decoration: none;
+                .video-metadata .metadata-btn:first-child {
+                    margin-left: 0;
                 }
-                .video-metadata .metadata-link:hover {
-                    color: #0056b3;
-                    text-decoration: underline;
-                }
-                .video-metadata .metadata-separator {
-                    color: #dee2e6;
-                    font-weight: bold;
-                    margin: 0 0.5rem;
+                .video-metadata .metadata-btn:last-child {
+                    margin-right: 0;
                 }
             `;
             document.head.appendChild(style);
