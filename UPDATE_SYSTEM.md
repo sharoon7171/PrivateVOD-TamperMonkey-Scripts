@@ -42,6 +42,7 @@ A dedicated script (`update-checker.js`) that:
 | Favourite & Like Tracker | [Update](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Favourite%20%26%20Like%20Tracker/privatevod%20favourite%20and%20like%20tracker.user.js) |
 | Hide Favourite Videos | [Update](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Hide%20Favourite%20Videos/privatevod%20hide%20favourite%20videos.user.js) |
 | Hide Liked Videos | [Update](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Hide%20Liked%20Videos/privatevod%20hide%20liked%20videos.user.js) |
+| Screenshot Gallery | [Update](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Screenshot%20Gallery/privatevod%20screenshot%20gallery.user.js) |
 
 ## 🔧 **How to Enable Auto-Updates**
 

@@ -114,6 +114,22 @@ Hides grid items containing ONLY liked (not favourited) scene IDs with smart log
 
 ---
 
+### 9. **Screenshot Gallery** 📸
+Automatically creates a screenshot gallery above the scenes section with instant loading.
+
+[![Install Screenshot Gallery](https://img.shields.io/badge/Install-Screenshot%20Gallery-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Screenshot%20Gallery/privatevod%20screenshot%20gallery.user.js)
+
+**Features:**
+- 📸 6 images per row desktop layout
+- ⚡ Instant loading with no delays
+- 🖼️ Full-width responsive design
+- 🎯 Original aspect ratio (no cropping)
+- 🖱️ Click to open full-size images
+- ✨ Hover effects with smooth scaling
+- 🔄 Auto-updates
+
+---
+
 ## 🔧 **Installation Instructions**
 
 ### **Step 1: Install TamperMonkey**
@@ -150,6 +166,7 @@ For the best experience, install these scripts together:
 5. **Favourite & Like Tracker** - Track your favourites
 6. **Hide Favourite Videos** - Hide favourited videos from grid
 7. **Hide Liked Videos** - Hide liked-only videos from grid
+8. **Screenshot Gallery** - Visual screenshot gallery above scenes
 
 ## 🛠️ **Troubleshooting**
 
@@ -181,6 +198,7 @@ For the best experience, install these scripts together:
 | Favourite & Like Tracker | ✅ | ❌ | ✅ | ❌ |
 | Hide Favourite Videos | ✅ | ❌ | ✅ | ❌ |
 | Hide Liked Videos | ✅ | ❌ | ✅ | ❌ |
+| Screenshot Gallery | ✅ | ❌ | ✅ | ❌ |
 
 ## 🎉 **Features Summary**
 
