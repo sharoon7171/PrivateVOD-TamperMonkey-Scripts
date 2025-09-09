@@ -5,6 +5,8 @@
 // @description  Enable Auto Play Video Loading without need to click play button and prevent start playing automatically
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
+// @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Video%20Loader/privatevod%20auto%20video%20loader.user.js
+// @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Video%20Loader/privatevod%20auto%20video%20loader.user.js
 // @match        https://www.privatevod.com/*video.html*
 // @match        https://www.privatevod.com/*videos.html*
 // @match        https://privatevod.com/*video.html*

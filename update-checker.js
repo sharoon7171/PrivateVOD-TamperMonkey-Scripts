@@ -5,6 +5,8 @@
 // @description  Automatically checks for updates to all PrivateVOD scripts and notifies users
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
+// @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/update-checker.js
+// @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/update-checker.js
 // @match        https://www.privatevod.com/*
 // @match        https://privatevod.com/*
 // @grant        GM_xmlhttpRequest
