@@ -99,6 +99,21 @@ Hides grid items containing favourited scene IDs with real-time updates.
 
 ---
 
+### 8. **Hide Liked Videos** 👍
+Hides grid items containing ONLY liked (not favourited) scene IDs with smart logic.
+
+[![Install Hide Liked Videos](https://img.shields.io/badge/Install-Hide%20Liked%20Videos-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Hide%20Liked%20Videos/privatevod%20hide%20liked%20videos.user.js)
+
+**Features:**
+- 👍 Hides liked-only videos (not favourited)
+- 🧠 Smart logic: favourited videos take priority
+- ⚡ Real-time storage monitoring
+- 🔄 Instant hide/show updates
+- 🛠️ Console commands for control
+- 🔄 Auto-updates
+
+---
+
 ## 🔧 **Installation Instructions**
 
 ### **Step 1: Install TamperMonkey**
@@ -134,6 +149,7 @@ For the best experience, install these scripts together:
 4. **Element Blocker** - Clean up unwanted content
 5. **Favourite & Like Tracker** - Track your favourites
 6. **Hide Favourite Videos** - Hide favourited videos from grid
+7. **Hide Liked Videos** - Hide liked-only videos from grid
 
 ## 🛠️ **Troubleshooting**
 
@@ -164,6 +180,7 @@ For the best experience, install these scripts together:
 | Auto Video Loader | ✅ | ❌ | ✅ | ❌ |
 | Favourite & Like Tracker | ✅ | ❌ | ✅ | ❌ |
 | Hide Favourite Videos | ✅ | ❌ | ✅ | ❌ |
+| Hide Liked Videos | ✅ | ❌ | ✅ | ❌ |
 
 ## 🎉 **Features Summary**
 
