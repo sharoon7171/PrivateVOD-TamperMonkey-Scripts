@@ -214,15 +214,6 @@
         console.log('🎨 Styles added for hidden elements');
     }
     
-    // Cleanup function to show all hidden elements when script is disabled
-    function cleanup() {
-        const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
-        hiddenItems.forEach(item => {
-            item.classList.remove(CONFIG.hideClass);
-            item.style.display = '';
-        });
-        console.log(`👁️ Cleanup: Shown ${hiddenItems.length} previously hidden elements`);
-    }
     
     // Initialize the script
     function init() {
@@ -233,10 +224,9 @@
         
         console.log('🚀 PrivateVOD Hide Favourite Videos ready');
         console.log('💡 Use PrivateVODHideFavourites.process() to manually process');
+        console.log('🔄 Script automatically handles enable/disable - no manual cleanup needed');
     }
     
-    // Add cleanup to global scope for manual cleanup
-    window.PrivateVODHideFavourites.cleanup = cleanup;
     
     // Real-time script enable/disable detection
     function setupScriptStateMonitor() {
@@ -261,7 +251,13 @@
                 (now - lastHeartbeat) > 3000) {
                 if (isScriptActive) {
                     console.log('🔄 Script detected as disabled - showing all elements');
-                    cleanup();
+                    // Show all hidden elements
+                    const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
+                    hiddenItems.forEach(item => {
+                        item.classList.remove(CONFIG.hideClass);
+                        item.style.display = '';
+                    });
+                    console.log(`👁️ Shown ${hiddenItems.length} previously hidden elements`);
                     isScriptActive = false;
                     if (heartbeatInterval) {
                         clearInterval(heartbeatInterval);
