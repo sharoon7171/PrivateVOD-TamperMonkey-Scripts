@@ -183,24 +183,6 @@
         process: processGridItems,
         getFavourites: getFavouritedScenes,
         config: CONFIG,
-        hide: (sceneId) => {
-            const gridItem = document.querySelector(`#ascene_${sceneId}`);
-            if (gridItem) {
-                hideGridItem(gridItem);
-                console.log(`🚫 Manually hidden scene ${sceneId}`);
-            } else {
-                console.log(`❌ Scene ${sceneId} not found`);
-            }
-        },
-        show: (sceneId) => {
-            const gridItem = document.querySelector(`#ascene_${sceneId}`);
-            if (gridItem) {
-                showGridItem(gridItem);
-                console.log(`👁️ Manually shown scene ${sceneId}`);
-            } else {
-                console.log(`❌ Scene ${sceneId} not found`);
-            }
-        },
         showAll: () => {
             const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
             hiddenItems.forEach(item => {
