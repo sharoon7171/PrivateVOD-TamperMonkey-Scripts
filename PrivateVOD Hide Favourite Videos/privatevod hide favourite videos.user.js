@@ -22,8 +22,28 @@
     const CONFIG = {
         storageKey: 'privatevod_favourites',
         hideClass: 'privatevod-hidden-favourite',
-        debugMode: false
+        debugMode: false,
+        toggleKey: 'privatevod_hide_enabled'
     };
+    
+    // Get script enabled state
+    function isScriptEnabled() {
+        try {
+            const stored = localStorage.getItem(CONFIG.toggleKey);
+            return stored !== 'false'; // Default to enabled if not set
+        } catch (e) {
+            return true; // Default to enabled on error
+        }
+    }
+    
+    // Set script enabled state
+    function setScriptEnabled(enabled) {
+        try {
+            localStorage.setItem(CONFIG.toggleKey, enabled.toString());
+        } catch (e) {
+            console.log('❌ Error saving script state:', e);
+        }
+    }
     
     // Get favourited scenes from localStorage
     function getFavouritedScenes() {
@@ -83,6 +103,7 @@
     function processGridItems() {
         const gridItems = document.querySelectorAll('.grid-item');
         const favouritedScenes = getFavouritedScenes();
+        const scriptEnabled = isScriptEnabled();
         let hiddenCount = 0;
         let shownCount = 0;
         
@@ -96,6 +117,7 @@
         if (CONFIG.debugMode) {
             console.log(`🎯 Processing ${gridItems.length} grid items`);
             console.log(`💾 Favourited scenes: [${Array.from(favouritedScenes).join(', ')}]`);
+            console.log(`🔧 Script enabled: ${scriptEnabled}`);
         }
         
         gridItems.forEach((gridItem, index) => {
@@ -104,8 +126,8 @@
             if (sceneId) {
                 const isFavourited = favouritedScenes.has(sceneId);
                 
-                if (isFavourited) {
-                    // Hide favourited scenes
+                if (scriptEnabled && isFavourited) {
+                    // Hide favourited scenes when script is enabled
                     if (hideGridItem(gridItem)) {
                         hiddenCount++;
                         if (CONFIG.debugMode) {
@@ -113,7 +135,7 @@
                         }
                     }
                 } else {
-                    // Show non-favourited scenes
+                    // Show all scenes when script is disabled or scene not favourited
                     if (showGridItem(gridItem)) {
                         shownCount++;
                         if (CONFIG.debugMode) {
@@ -127,7 +149,7 @@
         });
         
         if (hiddenCount > 0 || shownCount > 0) {
-            console.log(`✅ Processed grid items: ${hiddenCount} hidden, ${shownCount} shown`);
+            console.log(`✅ Processed grid items: ${hiddenCount} hidden, ${shownCount} shown (Script: ${scriptEnabled ? 'ENABLED' : 'DISABLED'})`);
         }
         
         return { hidden: hiddenCount, shown: shownCount };
@@ -180,6 +202,22 @@
     // Expose functions to global scope for console access
     window.PrivateVODHideFavourites = {
         process: processGridItems,
+        toggle: toggleScript,
+        enable: () => {
+            setScriptEnabled(true);
+            processGridItems();
+            console.log('✅ Script ENABLED');
+        },
+        disable: () => {
+            setScriptEnabled(false);
+            processGridItems();
+            console.log('❌ Script DISABLED');
+        },
+        status: () => {
+            const enabled = isScriptEnabled();
+            console.log(`🔧 Script is currently: ${enabled ? 'ENABLED' : 'DISABLED'}`);
+            return enabled;
+        },
         getFavourites: getFavouritedScenes,
         config: CONFIG,
         hide: (sceneId) => {
@@ -220,85 +258,46 @@
         addStyles();
         waitForGridItems();
         setupStorageMonitor();
-        setupScriptStateMonitor();
+        setupToggleControls();
         
         console.log('🚀 PrivateVOD Hide Favourite Videos ready');
         console.log('💡 Use PrivateVODHideFavourites.process() to manually process');
-        console.log('🔄 Script automatically handles enable/disable - no manual cleanup needed');
+        console.log('⌨️ Press Ctrl+Shift+H to toggle script on/off');
+        console.log(`🔧 Script is currently: ${isScriptEnabled() ? 'ENABLED' : 'DISABLED'}`);
     }
     
     
-    // Real-time script enable/disable detection
-    function setupScriptStateMonitor() {
-        let isScriptActive = true;
-        let heartbeatInterval;
+    // Toggle script functionality
+    function toggleScript() {
+        const currentState = isScriptEnabled();
+        const newState = !currentState;
+        setScriptEnabled(newState);
         
-        // Set up heartbeat to detect if script is disabled
-        function startHeartbeat() {
-            heartbeatInterval = setInterval(() => {
-                // Update heartbeat timestamp
-                window.PrivateVODHideFavourites.lastHeartbeat = Date.now();
-            }, 1000);
-        }
+        console.log(`🔄 Script ${newState ? 'ENABLED' : 'DISABLED'} - ${newState ? 'hiding' : 'showing'} favourited videos`);
+        processGridItems();
         
-        // Check if script is still active
-        function checkScriptState() {
-            const now = Date.now();
-            const lastHeartbeat = window.PrivateVODHideFavourites?.lastHeartbeat || 0;
-            
-            // If heartbeat is too old or functions don't exist, script was disabled
-            if (!window.PrivateVODHideFavourites || !window.PrivateVODHideFavourites.process || 
-                (now - lastHeartbeat) > 3000) {
-                if (isScriptActive) {
-                    console.log('🔄 Script detected as disabled - showing all elements');
-                    // Show all hidden elements
-                    const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
-                    hiddenItems.forEach(item => {
-                        item.classList.remove(CONFIG.hideClass);
-                        item.style.display = '';
-                    });
-                    console.log(`👁️ Shown ${hiddenItems.length} previously hidden elements`);
-                    isScriptActive = false;
-                    if (heartbeatInterval) {
-                        clearInterval(heartbeatInterval);
-                    }
-                }
-                return;
+        return newState;
+    }
+    
+    // Setup keyboard shortcut and toggle functionality
+    function setupToggleControls() {
+        // Keyboard shortcut: Ctrl + Shift + H
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.shiftKey && event.key === 'H') {
+                event.preventDefault();
+                toggleScript();
             }
-            
-            // If script is active but was previously disabled, re-process
-            if (!isScriptActive) {
-                console.log('🔄 Script detected as enabled - hiding favourited elements');
-                isScriptActive = true;
-                processGridItems();
-                startHeartbeat();
-            }
-            
-            // Check every 500ms
-            setTimeout(checkScriptState, 500);
-        }
-        
-        // Start heartbeat
-        startHeartbeat();
-        
-        // Start monitoring
-        checkScriptState();
-        
-        // Listen for focus events (user might have disabled/enabled script)
-        window.addEventListener('focus', () => {
-            setTimeout(() => {
-                if (window.PrivateVODHideFavourites && window.PrivateVODHideFavourites.process) {
-                    if (!isScriptActive) {
-                        console.log('🔄 Script re-enabled on focus');
-                        isScriptActive = true;
-                        processGridItems();
-                        startHeartbeat();
-                    }
-                }
-            }, 100);
         });
         
-        console.log('👀 Script state monitor started with heartbeat');
+        // Listen for storage changes (from other tabs)
+        window.addEventListener('storage', (e) => {
+            if (e.key === CONFIG.toggleKey) {
+                console.log('🔄 Script state changed from another tab');
+                processGridItems();
+            }
+        });
+        
+        console.log('⌨️ Toggle controls ready - Press Ctrl+Shift+H to toggle');
     }
     
     // Start the script
