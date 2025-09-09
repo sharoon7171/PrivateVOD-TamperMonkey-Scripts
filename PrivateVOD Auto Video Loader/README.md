@@ -1,4 +1,4 @@
-# Auto Video Loader
+# PrivateVOD Auto Video Loader
 
 A TamperMonkey script that automatically loads video players on PrivateVOD.com without autoplay. No more clicking the play button - videos load instantly but don't start playing automatically.
 
@@ -27,7 +27,7 @@ Page Load → Wait for Functions → Call loadPlayer() → Modify iframe URL →
 
 ### Method 1: Direct Install (Recommended)
 1. **Install TamperMonkey** browser extension
-2. **Click this link**: [Install Auto Video Loader](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/Auto%20Video%20Loader/autoVideoLoader.user.js)
+2. **Click this link**: [Install PrivateVOD Auto Video Loader](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Video%20Loader/privatevod%20auto%20video%20loader.user.js)
 3. **TamperMonkey will open** - click "Install"
 4. **Done!** - Script will work on all video pages
 
@@ -35,7 +35,7 @@ Page Load → Wait for Functions → Call loadPlayer() → Modify iframe URL →
 1. **Install TamperMonkey** browser extension
 2. **Open TamperMonkey Dashboard**
 3. **Click "Create a new script"**
-4. **Copy and paste** the code from `autoVideoLoader.user.js`
+4. **Copy and paste** the code from `privatevod auto video loader.user.js`
 5. **Save** (Ctrl+S)
 6. **Visit any video page** on PrivateVOD.com
 

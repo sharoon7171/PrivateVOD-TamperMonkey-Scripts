@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Auto Play Video Loader
+// @name         PrivateVOD Auto Video Loader
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Enable Auto Play Video Loading without need to click play button and prevent start playing automatically
@@ -7,11 +7,16 @@
 // @homepageURL  https://sqtech.dev
 // @match        https://www.privatevod.com/*video.html*
 // @match        https://www.privatevod.com/*videos.html*
+// @match        https://privatevod.com/*video.html*
+// @match        https://privatevod.com/*videos.html*
 // @grant        none
 // ==/UserScript==
 
 (function() {
     'use strict';
+    
+    // Debug: Log that script is running
+    console.log('🎬 Auto Video Loader script loaded on:', window.location.href);
     
     // Wait for all required conditions to be met in real-time
     function waitForConditions() {
