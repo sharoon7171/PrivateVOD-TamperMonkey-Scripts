@@ -33,29 +33,28 @@
         
         console.log('🎯 Found user-actions and purchase-options elements');
         
-        // Create single card with both user-actions and metadata in one row
-        const combinedCard = document.createElement('div');
-        combinedCard.className = 'card m-2';
-        combinedCard.innerHTML = `
+        // Create separate cards for metadata and user actions
+        const metadataCard = document.createElement('div');
+        metadataCard.className = 'card m-2';
+        metadataCard.innerHTML = `
             <div class="card-body">
-                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
-                    <!-- Metadata Section -->
-                    <div class="video-metadata d-flex flex-wrap align-items-center gap-2">
-                        ${extractMetadataFromDOM(metadataContainer)}
-                    </div>
-                    
-                    <!-- Divider -->
-                    <div class="vr opacity-25"></div>
-                    
-                    <!-- User Actions Section -->
-                    <div class="user-actions d-flex flex-wrap align-items-center gap-2">
-                        ${userActions.innerHTML}
-                    </div>
+                <div class="video-metadata d-flex flex-wrap align-items-center gap-2">
+                    ${extractMetadataFromDOM(metadataContainer)}
                 </div>
             </div>
         `;
         
-        // Add CSS styling
+        const userActionsCard = document.createElement('div');
+        userActionsCard.className = 'card m-2';
+        userActionsCard.innerHTML = `
+            <div class="card-body">
+                <div class="user-actions d-flex flex-wrap align-items-center gap-2">
+                    ${userActions.innerHTML}
+                </div>
+            </div>
+        `;
+        
+        // Add CSS styling only for metadata
         const style = document.createElement('style');
         style.textContent = `
             .video-metadata .metadata-btn {
@@ -82,62 +81,12 @@
                 font-weight: 600;
                 margin-right: 0.4rem;
             }
-            
-            .user-actions .btn {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.8rem;
-                border-radius: 12px;
-                font-weight: 500;
-                transition: all 0.2s ease;
-                border: none;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            }
-            .user-actions .btn:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            }
-            .user-actions .btn-primary {
-                background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-            }
-            .user-actions .btn-success {
-                background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-            }
-            .user-actions .btn-secondary {
-                background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
-            }
-            .user-actions .btn-outline-secondary {
-                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-                color: #495057;
-                border: 1px solid #dee2e6;
-            }
-            .user-actions .btn-outline-secondary:hover {
-                background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-                color: #212529;
-            }
-            
-            .vr {
-                width: 1px;
-                background-color: #dee2e6;
-                min-height: 2rem;
-            }
-            
-            @media (max-width: 768px) {
-                .d-flex.justify-content-between {
-                    flex-direction: column !important;
-                    align-items: stretch !important;
-                }
-                .vr {
-                    display: none !important;
-                }
-                .video-metadata, .user-actions {
-                    justify-content: center !important;
-                }
-            }
         `;
         document.head.appendChild(style);
         
-        // Insert the combined card at the beginning of purchase-options
-        purchaseOptions.insertBefore(combinedCard, purchaseOptions.firstChild);
+        // Insert the cards at the beginning of purchase-options
+        purchaseOptions.insertBefore(metadataCard, purchaseOptions.firstChild);
+        purchaseOptions.insertBefore(userActionsCard, purchaseOptions.firstChild);
         
         // Remove the original elements
         userActions.remove();
@@ -155,38 +104,35 @@
         
         const metadataItems = [];
         
+        // Get all text content and parse it properly
+        const allText = metadataContainer.textContent || metadataContainer.innerText || '';
+        console.log('📝 Full metadata text:', allText);
+        
         // Extract release date
-        const releaseDate = metadataContainer.querySelector('.release-date');
-        if (releaseDate) {
-            const releaseText = releaseDate.textContent.trim();
-            const releasedMatch = releaseText.match(/Released:\s*(.+)/);
-            if (releasedMatch) {
-                metadataItems.push(`<span class="metadata-btn"><strong>Released:</strong> ${releasedMatch[1]}</span>`);
-            }
+        const releasedMatch = allText.match(/Released:\s*([^\n\r]+)/);
+        if (releasedMatch) {
+            metadataItems.push(`<span class="metadata-btn"><strong>Released:</strong> ${releasedMatch[1].trim()}</span>`);
         }
         
         // Extract studio
-        const studio = metadataContainer.querySelector('.studio a');
-        if (studio) {
-            metadataItems.push(`<span class="metadata-btn"><strong>Studio:</strong> ${studio.textContent.trim()}</span>`);
+        const studioMatch = allText.match(/Studio:\s*([^\n\r]+)/);
+        if (studioMatch) {
+            metadataItems.push(`<span class="metadata-btn"><strong>Studio:</strong> ${studioMatch[1].trim()}</span>`);
         }
         
         // Extract director
-        const director = metadataContainer.querySelector('.director a');
-        if (director) {
-            metadataItems.push(`<span class="metadata-btn"><strong>Director:</strong> ${director.textContent.trim()}</span>`);
+        const directorMatch = allText.match(/Director:\s*([^\n\r]+)/);
+        if (directorMatch) {
+            metadataItems.push(`<span class="metadata-btn"><strong>Director:</strong> ${directorMatch[1].trim()}</span>`);
         }
         
         // Extract length
-        const length = metadataContainer.querySelector('.release-date');
-        if (length) {
-            const lengthText = length.textContent.trim();
-            const lengthMatch = lengthText.match(/Length:\s*(.+)/);
-            if (lengthMatch) {
-                metadataItems.push(`<span class="metadata-btn"><strong>Length:</strong> ${lengthMatch[1]}</span>`);
-            }
+        const lengthMatch = allText.match(/Length:\s*([^\n\r]+)/);
+        if (lengthMatch) {
+            metadataItems.push(`<span class="metadata-btn"><strong>Length:</strong> ${lengthMatch[1].trim()}</span>`);
         }
         
+        console.log('📋 Extracted metadata items:', metadataItems);
         return metadataItems.join(' ');
     }
     
