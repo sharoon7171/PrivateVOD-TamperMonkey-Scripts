@@ -2,7 +2,7 @@
 // @name         PrivateVOD Element Blocker
 // @namespace    http://tampermonkey.net/
 // @version      1.0
-// @description  Removes unwanted elements containing Scene, HD, or Stream from cards
+// @description  Removes entire cards containing Scene, HD, or Stream keywords
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
 // @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Blocker/privatevod%20element%20blocker.user.js
@@ -20,7 +20,7 @@
     
     console.log('🛡️ PrivateVOD Element Blocker script loaded');
     
-    // Function to block unwanted elements from cards
+    // Function to block unwanted cards completely
     function blockUnwantedElements() {
         const cards = document.querySelectorAll('.card.m-2');
         let blockedCount = 0;
@@ -33,25 +33,20 @@
         console.log(`🎯 Found ${cards.length} cards to check`);
         
         cards.forEach((card, cardIndex) => {
-            // Find all divs within the card
-            const divs = card.querySelectorAll('div');
+            const cardText = card.textContent || card.innerText || '';
             
-            divs.forEach(div => {
-                const text = div.textContent || div.innerText || '';
-                
-                // Check if div contains unwanted keywords
-                if (text.includes('Scene') || text.includes('HD') || text.includes('Stream')) {
-                    console.log(`🚫 Blocking unwanted element from card ${cardIndex + 1}:`, text.trim().substring(0, 50) + '...');
-                    div.remove();
-                    blockedCount++;
-                }
-            });
+            // Check if entire card contains unwanted keywords
+            if (cardText.includes('Scene') || cardText.includes('HD') || cardText.includes('Stream')) {
+                console.log(`🚫 Blocking entire card ${cardIndex + 1}:`, cardText.trim().substring(0, 50) + '...');
+                card.remove();
+                blockedCount++;
+            }
         });
         
         if (blockedCount > 0) {
-            console.log(`✅ Blocked ${blockedCount} unwanted elements from cards`);
+            console.log(`✅ Blocked ${blockedCount} entire cards`);
         } else {
-            console.log('✅ No unwanted elements found in cards');
+            console.log('✅ No unwanted cards found');
         }
         
         return blockedCount > 0;
