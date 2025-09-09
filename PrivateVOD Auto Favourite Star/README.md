@@ -26,19 +26,14 @@ Page Load → Wait for Button → Check Status → Auto-Favourite (if needed) �
 
 ## 📦 Installation
 
-### Method 1: Direct Install (Recommended)
+### One-Click Install
+[![Install PrivateVOD Auto Favourite Star](https://img.shields.io/badge/Install-Script-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Favourite%20Star/privatevod%20auto%20favourite%20star.user.js)
+
+### Manual Installation
 1. **Install TamperMonkey** browser extension
-2. **Click this link**: [Install PrivateVOD Auto Favourite Star](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Favourite%20Star/privatevod%20auto%20favourite%20star.user.js)
+2. **Click the install link above**
 3. **TamperMonkey will open** - click "Install"
 4. **Done!** - Script will work on all star pages
-
-### Method 2: Manual Installation
-1. **Install TamperMonkey** browser extension
-2. **Open TamperMonkey Dashboard**
-3. **Click "Create a new script"**
-4. **Copy and paste** the code from `privatevod auto favourite star.user.js`
-5. **Save** (Ctrl+S)
-6. **Visit any star page** on PrivateVOD.com
 
 ## 🎯 Usage
 

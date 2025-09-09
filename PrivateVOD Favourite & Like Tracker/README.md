@@ -28,19 +28,14 @@ Page Load → Find Button → Setup Observer → Monitor Changes → Update Stor
 
 ## 📦 Installation
 
-### Method 1: Direct Install (Recommended)
+### One-Click Install
+[![Install PrivateVOD Favourite & Like Tracker](https://img.shields.io/badge/Install-Script-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Favourite%20%26%20Like%20Tracker/privatevod%20favourite%20and%20like%20tracker.user.js)
+
+### Manual Installation
 1. **Install TamperMonkey** browser extension
-2. **Click this link**: [Install PrivateVOD Favourite & Like Tracker](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Favourite%20%26%20Like%20Tracker/privatevod%20favourite%20and%20like%20tracker.user.js)
+2. **Click the install link above**
 3. **TamperMonkey will open** - click "Install"
 4. **Done!** - Script will work on all video pages
-
-### Method 2: Manual Installation
-1. **Install TamperMonkey** browser extension
-2. **Open TamperMonkey Dashboard**
-3. **Click "Create a new script"**
-4. **Copy and paste** the code from `privatevod favourite and like tracker.user.js`
-5. **Save** (Ctrl+S)
-6. **Visit any video page** on PrivateVOD.com
 
 ## 🎯 Usage
 

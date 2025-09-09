@@ -21,10 +21,15 @@ A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, 
 
 ## Installation
 
+### One-Click Install
+[![Install PrivateVOD Element Mover](https://img.shields.io/badge/Install-Script-green?style=for-the-badge&logo=tampermonkey)](https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Mover/privatevod%20element%20mover.user.js)
+
+### Manual Installation
 1. Install TamperMonkey browser extension
-2. Click on the script file and install it
-3. Visit any PrivateVOD video page
-4. The user-actions buttons will appear inside the purchase options area
+2. Click the install link above
+3. TamperMonkey will open - click "Install"
+4. Visit any PrivateVOD video page
+5. The user-actions and metadata will appear inside the purchase options area
 
 ## Technical Details
 
@@ -32,23 +37,6 @@ A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, 
 - **Method**: Network request interception + HTML modification
 - **Fallback**: DOM manipulation if network interception fails
 - **Performance**: Zero impact - changes happen before page render
-
-## Console Commands
-
-```javascript
-// Check if script is working
-console.log('Element Mover Status:', window.fetch !== window.fetch);
-
-// Manual fallback trigger
-setTimeout(() => {
-    const userActions = document.querySelector('.user-actions');
-    const purchaseOptions = document.querySelector('#purchase-options');
-    if (userActions && purchaseOptions) {
-        purchaseOptions.insertBefore(userActions, purchaseOptions.firstChild);
-        console.log('Manual move completed');
-    }
-}, 1000);
-```
 
 ## Compatibility
 
