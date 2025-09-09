@@ -5,6 +5,8 @@
 // @description  Tracks favourite and like status changes and stores scene IDs in localStorage with real-time updates
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
+// @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Favourite%20%26%20Like%20Tracker/privatevod%20favourite%20and%20like%20tracker.user.js
+// @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Favourite%20%26%20Like%20Tracker/privatevod%20favourite%20and%20like%20tracker.user.js
 // @match        https://www.privatevod.com/*video.html*
 // @match        https://www.privatevod.com/*videos.html*
 // @match        https://privatevod.com/*video.html*

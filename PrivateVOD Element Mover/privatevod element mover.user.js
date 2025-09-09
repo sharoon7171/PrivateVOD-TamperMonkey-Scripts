@@ -5,6 +5,8 @@
 // @description  Moves user-actions div inside purchase-options div at network level for instant, flicker-free movement
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
+// @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Mover/privatevod%20element%20mover.user.js
+// @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Mover/privatevod%20element%20mover.user.js
 // @match        https://www.privatevod.com/*video.html*
 // @match        https://www.privatevod.com/*videos.html*
 // @match        https://privatevod.com/*video.html*

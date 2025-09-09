@@ -5,6 +5,8 @@
 // @description  Automatically favourites videos when not already favourited and changes active button colors to green
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
+// @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Favourite%20Video/privatevod%20auto%20favourite%20video.user.js
+// @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Favourite%20Video/privatevod%20auto%20favourite%20video.user.js
 // @match        https://www.privatevod.com/*video.html*
 // @match        https://www.privatevod.com/*videos.html*
 // @match        https://privatevod.com/*video.html*

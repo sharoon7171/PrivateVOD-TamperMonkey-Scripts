@@ -5,6 +5,8 @@
 // @description  Automatically favourites stars when not already favourited and changes active button colors to green
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
+// @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Favourite%20Star/privatevod%20auto%20favourite%20star.user.js
+// @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Auto%20Favourite%20Star/privatevod%20auto%20favourite%20star.user.js
 // @match        https://www.privatevod.com/*pornstars.html*
 // @match        https://privatevod.com/*pornstars.html*
 // @grant        GM_xmlhttpRequest
