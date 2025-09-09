@@ -29,12 +29,6 @@ A dedicated script (`update-checker.js`) that:
 2. It will automatically monitor all other scripts
 3. Use `PrivateVODUpdateCheck.check()` for manual checks
 
-### **3. GitHub Actions Workflow**
-Automated workflow that:
-- ✅ Runs on every push to main branch
-- ✅ Runs daily at 2 AM UTC
-- ✅ Creates GitHub releases for script updates
-- ✅ Generates release notes automatically
 
 ## 📋 **Script Update URLs**
 
@@ -76,10 +70,10 @@ PrivateVODUpdateCheck.check();
 - Version comparison
 - Error reporting
 
-### **GitHub Releases**
-- Automatic release creation
-- Detailed change logs
-- Version tagging
+### **TamperMonkey Dashboard**
+- Shows update status for all scripts
+- One-click update installation
+- Version comparison
 
 ## 🛠️ **For Developers**
 
@@ -92,15 +86,8 @@ PrivateVODUpdateCheck.check();
 ### **Updating Script Versions**
 1. Change `@version` in script header
 2. Commit and push changes
-3. GitHub Actions will create release automatically
+3. TamperMonkey will detect updates automatically
 
-### **Manual Release Creation**
-```bash
-# Create release with specific version
-gh release create "v1.2.0" \
-  --title "New Features" \
-  --notes "Added new functionality"
-```
 
 ## 🔍 **Troubleshooting**
 
