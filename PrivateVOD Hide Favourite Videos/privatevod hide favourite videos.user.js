@@ -7,10 +7,8 @@
 // @homepageURL  https://sqtech.dev
 // @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Hide%20Favourite%20Videos/privatevod%20hide%20favourite%20videos.user.js
 // @downloadURL  https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Hide%20Favourite%20Videos/privatevod%20hide%20favourite%20videos.user.js
-// @match        https://www.privatevod.com/*video.html*
-// @match        https://www.privatevod.com/*videos.html*
-// @match        https://privatevod.com/*video.html*
-// @match        https://privatevod.com/*videos.html*
+// @match        https://www.privatevod.com/*
+// @match        https://privatevod.com/*
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
