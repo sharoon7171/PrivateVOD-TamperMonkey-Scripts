@@ -74,9 +74,14 @@
     waitForCards();
     
     // Also run periodically to catch dynamically added cards
+    let lastCardCount = document.querySelectorAll('.card.m-2').length;
     setInterval(() => {
-        blockUnwantedElements();
-    }, 2000); // Check every 2 seconds
+        const currentCards = document.querySelectorAll('.card.m-2');
+        if (currentCards.length !== lastCardCount) {
+            lastCardCount = currentCards.length;
+            blockUnwantedElements();
+        }
+    }, 2000); // Check every 2 seconds only if card count changes
     
     console.log('🚀 Element Blocker ready - monitoring for unwanted elements');
 })();
