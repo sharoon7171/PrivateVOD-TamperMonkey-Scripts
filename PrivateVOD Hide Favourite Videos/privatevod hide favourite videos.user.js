@@ -262,7 +262,7 @@
         
         console.log('🚀 PrivateVOD Hide Favourite Videos ready');
         console.log('💡 Use PrivateVODHideFavourites.process() to manually process');
-        console.log('⌨️ Press Ctrl+Shift+H to toggle script on/off');
+        console.log('🔄 Use PrivateVODHideFavourites.toggle() to enable/disable');
         console.log(`🔧 Script is currently: ${isScriptEnabled() ? 'ENABLED' : 'DISABLED'}`);
     }
     
@@ -279,16 +279,8 @@
         return newState;
     }
     
-    // Setup keyboard shortcut and toggle functionality
+    // Setup toggle functionality
     function setupToggleControls() {
-        // Keyboard shortcut: Ctrl + Shift + H
-        document.addEventListener('keydown', (event) => {
-            if (event.ctrlKey && event.shiftKey && event.key === 'H') {
-                event.preventDefault();
-                toggleScript();
-            }
-        });
-        
         // Listen for storage changes (from other tabs)
         window.addEventListener('storage', (e) => {
             if (e.key === CONFIG.toggleKey) {
@@ -297,7 +289,7 @@
             }
         });
         
-        console.log('⌨️ Toggle controls ready - Press Ctrl+Shift+H to toggle');
+        console.log('🔄 Toggle controls ready - Use console commands to control');
     }
     
     // Start the script
