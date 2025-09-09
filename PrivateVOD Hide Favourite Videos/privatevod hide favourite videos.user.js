@@ -22,28 +22,9 @@
     const CONFIG = {
         storageKey: 'privatevod_favourites',
         hideClass: 'privatevod-hidden-favourite',
-        debugMode: false,
-        toggleKey: 'privatevod_hide_enabled'
+        debugMode: false
     };
     
-    // Get script enabled state
-    function isScriptEnabled() {
-        try {
-            const stored = localStorage.getItem(CONFIG.toggleKey);
-            return stored !== 'false'; // Default to enabled if not set
-        } catch (e) {
-            return true; // Default to enabled on error
-        }
-    }
-    
-    // Set script enabled state
-    function setScriptEnabled(enabled) {
-        try {
-            localStorage.setItem(CONFIG.toggleKey, enabled.toString());
-        } catch (e) {
-            console.log('❌ Error saving script state:', e);
-        }
-    }
     
     // Get favourited scenes from localStorage
     function getFavouritedScenes() {
@@ -103,7 +84,6 @@
     function processGridItems() {
         const gridItems = document.querySelectorAll('.grid-item');
         const favouritedScenes = getFavouritedScenes();
-        const scriptEnabled = isScriptEnabled();
         let hiddenCount = 0;
         let shownCount = 0;
         
@@ -117,7 +97,6 @@
         if (CONFIG.debugMode) {
             console.log(`🎯 Processing ${gridItems.length} grid items`);
             console.log(`💾 Favourited scenes: [${Array.from(favouritedScenes).join(', ')}]`);
-            console.log(`🔧 Script enabled: ${scriptEnabled}`);
         }
         
         gridItems.forEach((gridItem, index) => {
@@ -126,8 +105,8 @@
             if (sceneId) {
                 const isFavourited = favouritedScenes.has(sceneId);
                 
-                if (scriptEnabled && isFavourited) {
-                    // Hide favourited scenes when script is enabled
+                if (isFavourited) {
+                    // Hide favourited scenes
                     if (hideGridItem(gridItem)) {
                         hiddenCount++;
                         if (CONFIG.debugMode) {
@@ -135,7 +114,7 @@
                         }
                     }
                 } else {
-                    // Show all scenes when script is disabled or scene not favourited
+                    // Show non-favourited scenes
                     if (showGridItem(gridItem)) {
                         shownCount++;
                         if (CONFIG.debugMode) {
@@ -149,7 +128,7 @@
         });
         
         if (hiddenCount > 0 || shownCount > 0) {
-            console.log(`✅ Processed grid items: ${hiddenCount} hidden, ${shownCount} shown (Script: ${scriptEnabled ? 'ENABLED' : 'DISABLED'})`);
+            console.log(`✅ Processed grid items: ${hiddenCount} hidden, ${shownCount} shown`);
         }
         
         return { hidden: hiddenCount, shown: shownCount };
@@ -202,22 +181,6 @@
     // Expose functions to global scope for console access
     window.PrivateVODHideFavourites = {
         process: processGridItems,
-        toggle: toggleScript,
-        enable: () => {
-            setScriptEnabled(true);
-            processGridItems();
-            console.log('✅ Script ENABLED');
-        },
-        disable: () => {
-            setScriptEnabled(false);
-            processGridItems();
-            console.log('❌ Script DISABLED');
-        },
-        status: () => {
-            const enabled = isScriptEnabled();
-            console.log(`🔧 Script is currently: ${enabled ? 'ENABLED' : 'DISABLED'}`);
-            return enabled;
-        },
         getFavourites: getFavouritedScenes,
         config: CONFIG,
         hide: (sceneId) => {
@@ -237,6 +200,14 @@
             } else {
                 console.log(`❌ Scene ${sceneId} not found`);
             }
+        },
+        showAll: () => {
+            const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
+            hiddenItems.forEach(item => {
+                item.classList.remove(CONFIG.hideClass);
+                item.style.display = '';
+            });
+            console.log(`👁️ Shown ${hiddenItems.length} previously hidden elements`);
         }
     };
     
@@ -258,39 +229,12 @@
         addStyles();
         waitForGridItems();
         setupStorageMonitor();
-        setupToggleControls();
         
         console.log('🚀 PrivateVOD Hide Favourite Videos ready');
         console.log('💡 Use PrivateVODHideFavourites.process() to manually process');
-        console.log('🔄 Use PrivateVODHideFavourites.toggle() to enable/disable');
-        console.log(`🔧 Script is currently: ${isScriptEnabled() ? 'ENABLED' : 'DISABLED'}`);
     }
     
     
-    // Toggle script functionality
-    function toggleScript() {
-        const currentState = isScriptEnabled();
-        const newState = !currentState;
-        setScriptEnabled(newState);
-        
-        console.log(`🔄 Script ${newState ? 'ENABLED' : 'DISABLED'} - ${newState ? 'hiding' : 'showing'} favourited videos`);
-        processGridItems();
-        
-        return newState;
-    }
-    
-    // Setup toggle functionality
-    function setupToggleControls() {
-        // Listen for storage changes (from other tabs)
-        window.addEventListener('storage', (e) => {
-            if (e.key === CONFIG.toggleKey) {
-                console.log('🔄 Script state changed from another tab');
-                processGridItems();
-            }
-        });
-        
-        console.log('🔄 Toggle controls ready - Use console commands to control');
-    }
     
     // Start the script
     init();
