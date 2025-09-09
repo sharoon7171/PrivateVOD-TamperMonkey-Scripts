@@ -181,7 +181,6 @@
     // Expose functions to global scope for console access
     window.PrivateVODHideFavourites = {
         process: processGridItems,
-        getFavourites: getFavouritedScenes,
         config: CONFIG,
         showAll: () => {
             const hiddenItems = document.querySelectorAll(`.${CONFIG.hideClass}`);
