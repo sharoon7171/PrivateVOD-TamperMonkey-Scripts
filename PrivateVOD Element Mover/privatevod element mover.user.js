@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PrivateVOD Element Mover
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.2.1
 // @description  Moves user-actions and video metadata divs inside purchase-options div with professional single-row layout
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
