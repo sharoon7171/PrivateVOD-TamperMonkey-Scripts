@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         PrivateVOD Element Mover
 // @namespace    http://tampermonkey.net/
-// @version      1.0
-// @description  Moves user-actions div inside purchase-options div at network level for instant, flicker-free movement
+// @version      1.1
+// @description  Moves user-actions and video metadata divs inside purchase-options div at network level for instant, flicker-free movement
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
 // @updateURL    https://raw.githubusercontent.com/sharoon7171/PrivateVOD-TamperMonkey-Scripts/main/PrivateVOD%20Element%20Mover/privatevod%20element%20mover.user.js
@@ -56,7 +56,7 @@
         return originalFetch.apply(this, args);
     };
     
-    // Function to move user-actions div inside purchase-options div
+    // Function to move user-actions and metadata div inside purchase-options div
     function moveUserActionsToPurchaseOptions(html) {
         try {
             // Find user-actions div with regex
@@ -70,6 +70,18 @@
             
             const userActionsHtml = userActionsMatch[0];
             console.log('🎯 Found user-actions div:', userActionsHtml.substring(0, 100) + '...');
+            
+            // Find metadata container div with regex
+            const metadataRegex = /<div class="container px-0"[^>]*>.*?<\/div>\s*<\/div>\s*<\/div>/s;
+            const metadataMatch = html.match(metadataRegex);
+            
+            let metadataHtml = '';
+            if (metadataMatch) {
+                metadataHtml = metadataMatch[0];
+                console.log('🎯 Found metadata container:', metadataHtml.substring(0, 100) + '...');
+            } else {
+                console.log('⚠️ Metadata container not found, continuing with user-actions only');
+            }
             
             // Find purchase-options div with regex
             const purchaseOptionsRegex = /<div[^>]*id="purchase-options"[^>]*>/;
@@ -86,6 +98,11 @@
             // Remove user-actions from its original location
             let modifiedHtml = html.replace(userActionsRegex, '');
             
+            // Remove metadata from its original location if found
+            if (metadataMatch) {
+                modifiedHtml = modifiedHtml.replace(metadataRegex, '');
+            }
+            
             // Create card-styled user-actions div with white background
             const cardStyledUserActions = `
 <!-- START USER ACTIONS CARD -->
@@ -99,13 +116,30 @@
 </div>
 <!-- END USER ACTIONS CARD -->`;
             
-            // Add styled user-actions at the beginning of purchase-options div
+            // Create card-styled metadata div with white background
+            let cardStyledMetadata = '';
+            if (metadataMatch) {
+                cardStyledMetadata = `
+<!-- START METADATA CARD -->
+<div class="card m-2">
+    <div class="card-body">
+        <h6 class="card-title mb-3">Video Details</h6>
+        <div class="video-metadata">
+            ${extractMetadataContent(metadataHtml)}
+        </div>
+    </div>
+</div>
+<!-- END METADATA CARD -->`;
+            }
+            
+            // Add styled elements at the beginning of purchase-options div
+            const elementsToAdd = cardStyledUserActions + (cardStyledMetadata ? '\n' + cardStyledMetadata : '');
             modifiedHtml = modifiedHtml.replace(
                 purchaseOptionsStart,
-                purchaseOptionsStart + '\n' + cardStyledUserActions + '\n'
+                purchaseOptionsStart + '\n' + elementsToAdd + '\n'
             );
             
-            console.log('✅ Successfully moved and styled user-actions as membership card');
+            console.log('✅ Successfully moved and styled user-actions and metadata as membership cards');
             return modifiedHtml;
             
         } catch (error) {
@@ -122,6 +156,16 @@
             return contentMatch[1].trim();
         }
         return userActionsHtml;
+    }
+    
+    // Function to extract content from metadata container
+    function extractMetadataContent(metadataHtml) {
+        // Extract the inner content from the metadata container
+        const contentMatch = metadataHtml.match(/<div class="container px-0"[^>]*>(.*?)<\/div>\s*<\/div>\s*<\/div>/s);
+        if (contentMatch) {
+            return contentMatch[1].trim();
+        }
+        return metadataHtml;
     }
     
     // Also override XMLHttpRequest for additional coverage
@@ -175,13 +219,14 @@
     // Fallback: DOM manipulation if network interception fails
     function fallbackDOMManipulation() {
         const userActions = document.querySelector('.user-actions');
+        const metadataContainer = document.querySelector('.container.px-0');
         const purchaseOptions = document.querySelector('#purchase-options');
         
         if (userActions && purchaseOptions) {
             // Create card-styled container for user-actions
-            const cardContainer = document.createElement('div');
-            cardContainer.className = 'card m-2';
-            cardContainer.innerHTML = `
+            const userActionsCard = document.createElement('div');
+            userActionsCard.className = 'card m-2';
+            userActionsCard.innerHTML = `
                 <div class="card-body text-center">
                     <h6 class="card-title mb-2">Quick Actions</h6>
                     <div class="user-actions d-flex flex-wrap justify-content-center gap-2">
@@ -190,13 +235,35 @@
                 </div>
             `;
             
-            // Insert the card at the beginning of purchase-options
-            purchaseOptions.insertBefore(cardContainer, purchaseOptions.firstChild);
+            // Insert the user-actions card at the beginning of purchase-options
+            purchaseOptions.insertBefore(userActionsCard, purchaseOptions.firstChild);
             
             // Remove the original user-actions div
             userActions.remove();
             
             console.log('🔄 Fallback: Moved and styled user-actions as membership card via DOM manipulation');
+        }
+        
+        if (metadataContainer && purchaseOptions) {
+            // Create card-styled container for metadata
+            const metadataCard = document.createElement('div');
+            metadataCard.className = 'card m-2';
+            metadataCard.innerHTML = `
+                <div class="card-body">
+                    <h6 class="card-title mb-3">Video Details</h6>
+                    <div class="video-metadata">
+                        ${metadataContainer.innerHTML}
+                    </div>
+                </div>
+            `;
+            
+            // Insert the metadata card at the beginning of purchase-options
+            purchaseOptions.insertBefore(metadataCard, purchaseOptions.firstChild);
+            
+            // Remove the original metadata container
+            metadataContainer.remove();
+            
+            console.log('🔄 Fallback: Moved and styled metadata as membership card via DOM manipulation');
         }
     }
     

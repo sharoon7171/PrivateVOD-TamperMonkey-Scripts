@@ -1,12 +1,12 @@
 # PrivateVOD Element Mover
 
-A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, Like, and Screenshots buttons) inside the purchase-options div and styles it as a membership card for a seamless, integrated look.
+A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, Like, and Screenshots buttons) and video metadata container (release date, studio, director, length, tags) inside the purchase-options div and styles them as membership cards for a seamless, integrated look.
 
 ## Features
 
 - **Network-level interception** - Modifies HTML before it reaches the browser
 - **Zero flickering** - Changes appear instantly as the page loads
-- **Card styling** - User-actions styled as membership card for seamless integration
+- **Card styling** - User-actions and metadata styled as membership cards for seamless integration
 - **Dual approach** - Uses both fetch() and XMLHttpRequest interception
 - **Fallback protection** - DOM manipulation as backup if network interception fails
 - **Comprehensive coverage** - Works on all PrivateVOD video pages
@@ -15,8 +15,8 @@ A TamperMonkey script that moves the user-actions div (containing 4K, Favorite, 
 
 1. **Intercepts network requests** at the document-start phase
 2. **Modifies HTML content** before it's parsed by the browser
-3. **Wraps user-actions in card styling** matching membership cards
-4. **Moves styled card** to the beginning of purchase-options div
+3. **Wraps user-actions and metadata in card styling** matching membership cards
+4. **Moves styled cards** to the beginning of purchase-options div
 5. **Returns modified HTML** to the browser for instant rendering
 
 ## Installation
