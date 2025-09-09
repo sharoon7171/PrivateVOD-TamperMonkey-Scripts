@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         PrivateVOD Element Mover
 // @namespace    http://tampermonkey.net/
-// @version      1.2.1
+// @version      1.3
 // @description  Moves user-actions and video metadata divs inside purchase-options div with professional single-row layout
 // @author       SQ Tech
 // @homepageURL  https://sqtech.dev
@@ -123,9 +123,35 @@
 <!-- START METADATA CARD -->
 <div class="card m-2">
     <div class="card-body">
-        <div class="video-metadata d-flex flex-wrap justify-content-between align-items-center">
+        <div class="video-metadata d-flex flex-wrap justify-content-center align-items-center gap-3">
             ${extractMetadataContent(metadataHtml)}
         </div>
+        <style>
+            .video-metadata .metadata-item {
+                display: inline-flex;
+                align-items: center;
+                gap: 0.25rem;
+                font-size: 0.9rem;
+                color: #6c757d;
+            }
+            .video-metadata .metadata-item strong {
+                color: #495057;
+                font-weight: 600;
+            }
+            .video-metadata .metadata-link {
+                color: #007bff;
+                text-decoration: none;
+            }
+            .video-metadata .metadata-link:hover {
+                color: #0056b3;
+                text-decoration: underline;
+            }
+            .video-metadata .metadata-separator {
+                color: #dee2e6;
+                font-weight: bold;
+                margin: 0 0.5rem;
+            }
+        </style>
     </div>
 </div>
 <!-- END METADATA CARD -->`;
@@ -157,12 +183,38 @@
         return userActionsHtml;
     }
     
-    // Function to extract content from metadata container
+    // Function to extract and clean metadata content for single row display
     function extractMetadataContent(metadataHtml) {
         // Extract the inner content from the metadata container
         const contentMatch = metadataHtml.match(/<div class="container px-0"[^>]*>(.*?)<\/div>\s*<\/div>\s*<\/div>/s);
         if (contentMatch) {
-            return contentMatch[1].trim();
+            let content = contentMatch[1].trim();
+            
+            // Clean up the HTML for better single-row display
+            content = content
+                // Remove extra whitespace and line breaks
+                .replace(/\s+/g, ' ')
+                // Clean up div structure
+                .replace(/<div class="row">/g, '')
+                .replace(/<\/div>/g, '')
+                .replace(/<div class="col-sm-5">/g, '')
+                .replace(/<div class="col-sm-7">/g, '')
+                // Clean up individual metadata items
+                .replace(/<div class="release-date">/g, '<span class="metadata-item">')
+                .replace(/<div class="studio">/g, '<span class="metadata-item">')
+                .replace(/<div class="director">/g, '<span class="metadata-item">')
+                .replace(/<div class="length">/g, '<span class="metadata-item">')
+                // Clean up font-weight classes
+                .replace(/<span class="font-weight-bold mr-2">/g, '<strong>')
+                .replace(/<\/span>/g, '</strong>')
+                // Clean up links
+                .replace(/<a[^>]*>/g, '<span class="metadata-link">')
+                .replace(/<\/a>/g, '</span>')
+                // Add separators between items
+                .replace(/<\/strong>/g, '</strong>')
+                .replace(/(<\/span>)(<span class="metadata-item">)/g, '$1 <span class="metadata-separator">•</span> $2');
+            
+            return content;
         }
         return metadataHtml;
     }
@@ -249,11 +301,41 @@
             metadataCard.className = 'card m-2';
             metadataCard.innerHTML = `
                 <div class="card-body">
-                    <div class="video-metadata d-flex flex-wrap justify-content-between align-items-center">
+                    <div class="video-metadata d-flex flex-wrap justify-content-center align-items-center gap-3">
                         ${metadataContainer.innerHTML}
                     </div>
                 </div>
             `;
+            
+            // Add CSS styling
+            const style = document.createElement('style');
+            style.textContent = `
+                .video-metadata .metadata-item {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 0.25rem;
+                    font-size: 0.9rem;
+                    color: #6c757d;
+                }
+                .video-metadata .metadata-item strong {
+                    color: #495057;
+                    font-weight: 600;
+                }
+                .video-metadata .metadata-link {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+                .video-metadata .metadata-link:hover {
+                    color: #0056b3;
+                    text-decoration: underline;
+                }
+                .video-metadata .metadata-separator {
+                    color: #dee2e6;
+                    font-weight: bold;
+                    margin: 0 0.5rem;
+                }
+            `;
+            document.head.appendChild(style);
             
             // Insert the metadata card at the beginning of purchase-options
             purchaseOptions.insertBefore(metadataCard, purchaseOptions.firstChild);
