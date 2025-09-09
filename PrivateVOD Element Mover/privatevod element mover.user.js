@@ -103,68 +103,109 @@
                 modifiedHtml = modifiedHtml.replace(metadataRegex, '');
             }
             
-            // Create card-styled user-actions div with white background
-            const cardStyledUserActions = `
-<!-- START USER ACTIONS CARD -->
-<div class="card m-2">
-    <div class="card-body text-center">
-        <h6 class="card-title mb-2">Quick Actions</h6>
-        <div class="user-actions d-flex flex-wrap justify-content-center gap-2">
-            ${extractUserActionsContent(userActionsHtml)}
-        </div>
-    </div>
-</div>
-<!-- END USER ACTIONS CARD -->`;
-            
-            // Create card-styled metadata div with white background
-            let cardStyledMetadata = '';
-            if (metadataMatch) {
-                cardStyledMetadata = `
-<!-- START METADATA CARD -->
+            // Create single card with both user-actions and metadata in one row
+            const combinedCard = `
+<!-- START COMBINED CARD -->
 <div class="card m-2">
     <div class="card-body">
-        <div class="video-metadata d-flex flex-wrap justify-content-center align-items-center gap-3">
-            ${extractMetadataContent(metadataHtml)}
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <!-- Metadata Section -->
+            <div class="video-metadata d-flex flex-wrap align-items-center gap-2">
+                ${extractMetadataContent(metadataHtml)}
+            </div>
+            
+            <!-- Divider -->
+            <div class="vr opacity-25"></div>
+            
+            <!-- User Actions Section -->
+            <div class="user-actions d-flex flex-wrap align-items-center gap-2">
+                ${extractUserActionsContent(userActionsHtml)}
+            </div>
         </div>
+        
         <style>
             .video-metadata .metadata-btn {
                 display: inline-flex;
                 align-items: center;
-                padding: 0.5rem 1rem;
-                margin: 0.25rem;
+                padding: 0.4rem 0.8rem;
                 background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
                 border: 1px solid #dee2e6;
-                border-radius: 20px;
-                font-size: 0.85rem;
+                border-radius: 12px;
+                font-size: 0.8rem;
                 color: #495057;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                transition: all 0.3s ease;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                transition: all 0.2s ease;
                 white-space: nowrap;
+                font-weight: 500;
             }
             .video-metadata .metadata-btn:hover {
                 background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
                 transform: translateY(-1px);
-                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
             }
             .video-metadata .metadata-btn strong {
                 color: #212529;
                 font-weight: 600;
-                margin-right: 0.5rem;
+                margin-right: 0.4rem;
             }
-            .video-metadata .metadata-btn:first-child {
-                margin-left: 0;
+            
+            .user-actions .btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+                border-radius: 12px;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                border: none;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             }
-            .video-metadata .metadata-btn:last-child {
-                margin-right: 0;
+            .user-actions .btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            }
+            .user-actions .btn-primary {
+                background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+            }
+            .user-actions .btn-success {
+                background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+            }
+            .user-actions .btn-secondary {
+                background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+            }
+            .user-actions .btn-outline-secondary {
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                color: #495057;
+                border: 1px solid #dee2e6;
+            }
+            .user-actions .btn-outline-secondary:hover {
+                background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+                color: #212529;
+            }
+            
+            .vr {
+                width: 1px;
+                background-color: #dee2e6;
+                min-height: 2rem;
+            }
+            
+            @media (max-width: 768px) {
+                .d-flex.justify-content-between {
+                    flex-direction: column !important;
+                    align-items: stretch !important;
+                }
+                .vr {
+                    display: none !important;
+                }
+                .video-metadata, .user-actions {
+                    justify-content: center !important;
+                }
             }
         </style>
     </div>
 </div>
-<!-- END METADATA CARD -->`;
-            }
+<!-- END COMBINED CARD -->`;
             
-            // Add styled elements at the beginning of purchase-options div
-            const elementsToAdd = cardStyledUserActions + (cardStyledMetadata ? '\n' + cardStyledMetadata : '');
+            // Add styled element at the beginning of purchase-options div
+            const elementsToAdd = combinedCard;
             modifiedHtml = modifiedHtml.replace(
                 purchaseOptionsStart,
                 purchaseOptionsStart + '\n' + elementsToAdd + '\n'
@@ -276,94 +317,6 @@
         return xhr;
     };
     
-    // Fallback: DOM manipulation if network interception fails
-    function fallbackDOMManipulation() {
-        const userActions = document.querySelector('.user-actions');
-        const metadataContainer = document.querySelector('.container.px-0');
-        const purchaseOptions = document.querySelector('#purchase-options');
-        
-        if (userActions && purchaseOptions) {
-            // Create card-styled container for user-actions
-            const userActionsCard = document.createElement('div');
-            userActionsCard.className = 'card m-2';
-            userActionsCard.innerHTML = `
-                <div class="card-body text-center">
-                    <h6 class="card-title mb-2">Quick Actions</h6>
-                    <div class="user-actions d-flex flex-wrap justify-content-center gap-2">
-                        ${userActions.innerHTML}
-                    </div>
-                </div>
-            `;
-            
-            // Insert the user-actions card at the beginning of purchase-options
-            purchaseOptions.insertBefore(userActionsCard, purchaseOptions.firstChild);
-            
-            // Remove the original user-actions div
-            userActions.remove();
-            
-            console.log('🔄 Fallback: Moved and styled user-actions as membership card via DOM manipulation');
-        }
-        
-        if (metadataContainer && purchaseOptions) {
-            // Create card-styled container for metadata
-            const metadataCard = document.createElement('div');
-            metadataCard.className = 'card m-2';
-            metadataCard.innerHTML = `
-                <div class="card-body">
-                    <div class="video-metadata d-flex flex-wrap justify-content-center align-items-center gap-3">
-                        ${metadataContainer.innerHTML}
-                    </div>
-                </div>
-            `;
-            
-            // Add CSS styling for button design
-            const style = document.createElement('style');
-            style.textContent = `
-                .video-metadata .metadata-btn {
-                    display: inline-flex;
-                    align-items: center;
-                    padding: 0.5rem 1rem;
-                    margin: 0.25rem;
-                    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-                    border: 1px solid #dee2e6;
-                    border-radius: 20px;
-                    font-size: 0.85rem;
-                    color: #495057;
-                    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                    transition: all 0.3s ease;
-                    white-space: nowrap;
-                }
-                .video-metadata .metadata-btn:hover {
-                    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-                    transform: translateY(-1px);
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-                }
-                .video-metadata .metadata-btn strong {
-                    color: #212529;
-                    font-weight: 600;
-                    margin-right: 0.5rem;
-                }
-                .video-metadata .metadata-btn:first-child {
-                    margin-left: 0;
-                }
-                .video-metadata .metadata-btn:last-child {
-                    margin-right: 0;
-                }
-            `;
-            document.head.appendChild(style);
-            
-            // Insert the metadata card at the beginning of purchase-options
-            purchaseOptions.insertBefore(metadataCard, purchaseOptions.firstChild);
-            
-            // Remove the original metadata container
-            metadataContainer.remove();
-            
-            console.log('🔄 Fallback: Moved and styled metadata as membership card via DOM manipulation');
-        }
-    }
-    
-    // Run fallback after a short delay to ensure elements are loaded
-    setTimeout(fallbackDOMManipulation, 100);
     
     console.log('🚀 Element Mover ready - monitoring for user-actions and purchase-options elements');
 })();
