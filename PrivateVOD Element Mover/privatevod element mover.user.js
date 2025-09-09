@@ -23,7 +23,6 @@
     // Function to move elements using DOM manipulation
     function moveElementsToPurchaseOptions() {
         const userActions = document.querySelector('.user-actions');
-        const metadataContainer = document.querySelector('.container.px-0');
         const purchaseOptions = document.querySelector('#purchase-options');
         
         if (!userActions || !purchaseOptions) {
@@ -33,17 +32,55 @@
         
         console.log('🎯 Found user-actions and purchase-options elements');
         
-        // Create separate cards for metadata and user actions
+        // Find the col-sm-5 container with all metadata
+        const metadataContainer = document.querySelector('.col-sm-5');
+        
+        if (!metadataContainer) {
+            console.log('❌ Metadata container (.col-sm-5) not found');
+            return false;
+        }
+        
+        console.log('🎯 Found metadata container (.col-sm-5)');
+        
+        // Create metadata card with 2 rows
         const metadataCard = document.createElement('div');
         metadataCard.className = 'card m-2';
         metadataCard.innerHTML = `
             <div class="card-body">
-                <div class="video-metadata d-flex flex-wrap align-items-center gap-2">
-                    ${extractMetadataFromDOM(metadataContainer)}
+                <!-- First row: Text-only metadata -->
+                <div class="video-metadata-text d-flex flex-wrap align-items-center gap-2 mb-2">
+                    <!-- Text-only metadata will be moved here -->
+                </div>
+                <!-- Second row: Metadata with links -->
+                <div class="video-metadata-links d-flex flex-wrap align-items-center gap-2">
+                    <!-- Metadata with links will be moved here -->
                 </div>
             </div>
         `;
         
+        const textContainer = metadataCard.querySelector('.video-metadata-text');
+        const linksContainer = metadataCard.querySelector('.video-metadata-links');
+        
+        // Move ALL divs from the col-sm-5 container and separate them
+        const allMetadataDivs = metadataContainer.querySelectorAll('div');
+        allMetadataDivs.forEach(div => {
+            const divClone = div.cloneNode(true);
+            divClone.className = 'metadata-btn';
+            
+            // Check if div has links (a tags)
+            if (divClone.querySelector('a')) {
+                // Has links - put in second row
+                linksContainer.appendChild(divClone);
+            } else {
+                // Text only - put in first row
+                textContainer.appendChild(divClone);
+            }
+        });
+        
+        // Remove the original metadata container
+        metadataContainer.remove();
+        
+        // Create user actions card
         const userActionsCard = document.createElement('div');
         userActionsCard.className = 'card m-2';
         userActionsCard.innerHTML = `
@@ -54,32 +91,22 @@
             </div>
         `;
         
-        // Add CSS styling only for metadata
+        // Add basic button styling
         const style = document.createElement('style');
         style.textContent = `
-            .video-metadata .metadata-btn {
-                display: inline-flex;
-                align-items: center;
-                padding: 0.4rem 0.8rem;
-                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-                border: 1px solid #dee2e6;
-                border-radius: 12px;
-                font-size: 0.8rem;
-                color: #495057;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-                transition: all 0.2s ease;
-                white-space: nowrap;
-                font-weight: 500;
+            .video-metadata-text .metadata-btn,
+            .video-metadata-links .metadata-btn {
+                display: inline-block;
+                padding: 0.5rem 1rem;
+                margin: 0.25rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                background: #f8f9fa;
+                text-decoration: none;
             }
-            .video-metadata .metadata-btn:hover {
-                background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
-                transform: translateY(-1px);
-                box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            }
-            .video-metadata .metadata-btn strong {
-                color: #212529;
-                font-weight: 600;
-                margin-right: 0.4rem;
+            .video-metadata-text .metadata-btn:hover,
+            .video-metadata-links .metadata-btn:hover {
+                background: #e9ecef;
             }
         `;
         document.head.appendChild(style);
@@ -88,53 +115,13 @@
         purchaseOptions.insertBefore(metadataCard, purchaseOptions.firstChild);
         purchaseOptions.insertBefore(userActionsCard, purchaseOptions.firstChild);
         
-        // Remove the original elements
+        // Remove the original user actions
         userActions.remove();
-        if (metadataContainer) {
-            metadataContainer.remove();
-        }
         
-        console.log('✅ Successfully moved and styled elements as single card');
+        console.log('✅ Successfully moved individual metadata divs and user actions');
         return true;
     }
     
-    // Function to extract metadata from DOM elements
-    function extractMetadataFromDOM(metadataContainer) {
-        if (!metadataContainer) return '';
-        
-        const metadataItems = [];
-        
-        // Get all text content and parse it properly
-        const allText = metadataContainer.textContent || metadataContainer.innerText || '';
-        console.log('📝 Full metadata text:', allText);
-        
-        // Extract release date
-        const releasedMatch = allText.match(/Released:\s*([^\n\r]+)/);
-        if (releasedMatch) {
-            metadataItems.push(`<span class="metadata-btn"><strong>Released:</strong> ${releasedMatch[1].trim()}</span>`);
-        }
-        
-        // Extract studio
-        const studioMatch = allText.match(/Studio:\s*([^\n\r]+)/);
-        if (studioMatch) {
-            metadataItems.push(`<span class="metadata-btn"><strong>Studio:</strong> ${studioMatch[1].trim()}</span>`);
-        }
-        
-        // Extract director
-        const directorMatch = allText.match(/Director:\s*([^\n\r]+)/);
-        if (directorMatch) {
-            metadataItems.push(`<span class="metadata-btn"><strong>Director:</strong> ${directorMatch[1].trim()}</span>`);
-        }
-        
-        // Extract length
-        const lengthMatch = allText.match(/Length:\s*([^\n\r]+)/);
-        if (lengthMatch) {
-            metadataItems.push(`<span class="metadata-btn"><strong>Length:</strong> ${lengthMatch[1].trim()}</span>`);
-        }
-        
-        console.log('📋 Extracted metadata items:', metadataItems);
-        return metadataItems.join(' ');
-    }
     
     // Wait for elements to be available and then move them
     function waitForElements() {
